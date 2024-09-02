@@ -1,9 +1,10 @@
 #include "8051.h"
 #include "kingst.h"
 
+/** __interrupt(1) - timer0 __interrupt(3) - timer1 */
 
-static __bit is_0_init = 0;                                     // 是否初始化完成?
-static __bit is_1_init = 0;                                     // 是否初始化完成?
+static __bit is_0_init = 0;                                     // 是否初始化完�??
+static __bit is_1_init = 0;                                     // 是否初始化完�??
 
 /**
  * timer: 要初始化的定时器, value: 0/1
@@ -11,9 +12,9 @@ static __bit is_1_init = 0;                                     // 是否初始�
  */
 int timer_init(unsigned char timer) {
     if (timer == 0) {
-        TMOD = TMOD | 0b00000001 & 0b11110001;          // 低 4 位设置为 0b0001, 工作模式 1: 16 位计数器
+        TMOD = TMOD | 0b00000001 & 0b11110001;          // �? 4 位设置为 0b0001, 工作模式 1: 16 位计数器
     } else if (timer == 1) {
-        TMOD = TMOD | 0b00010000 & 0b00011111;          // 高 4 位设置为 0b0001, 工作模式 1: 16 位计数器
+        TMOD = TMOD | 0b00010000 & 0b00011111;          // �? 4 位设置为 0b0001, 工作模式 1: 16 位计数器
     } else {
         return -1;
     }
@@ -21,8 +22,8 @@ int timer_init(unsigned char timer) {
 }
 
 /**
- * 启动定时器
- * 返回: -1 - 未初始化或配置错误
+ * 启动定时�?
+ * 返回: -1 - 未初始化或配置错�?
  */
 unsigned char timer_start(unsigned char timer) {
     // 参数不对或者未初始化则返回错误
@@ -37,7 +38,7 @@ unsigned char timer_start(unsigned char timer) {
 }
 
 /**
- * 定时器中断使能
+ * 定时器中断使�?
  */
 void timer_enable_int(unsigned char timer) {
     switch (timer) {
@@ -56,7 +57,7 @@ void timer_enable_int(unsigned char timer) {
  * 设置定时时间
  */
 unsigned char timer_setup(unsigned char timer, unsigned int ms) {
-    // 1ms 需要 921 个计数周期
+    // 1ms 需�? 921 个计数周�?
     unsigned int one_ms_cnt = CRYSTYLE_FREQ / 12000 - 1;
     unsigned int init_num = 0xffff - (ms * one_ms_cnt);
     if (timer == 0) {
@@ -75,7 +76,7 @@ unsigned char timer_setup(unsigned char timer, unsigned int ms) {
 
 
 /**
- * 重置计数器
+ * 重置计数�?
  */
 unsigned char timer_reset(unsigned char timer, unsigned int ms) {
     return timer_setup(timer, ms);

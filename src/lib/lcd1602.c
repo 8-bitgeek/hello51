@@ -99,6 +99,19 @@ void lcd_print(unsigned char * str) {
     }
 }
 
+void lcd_printf(unsigned char * str, char clear, unsigned char x, unsigned y) {
+    if (clear) {
+        lcd_write_cmd(0x01);                        // 清屏
+    }
+    while (*str != '\0' && x + y * 16 <= 32) {
+        if (x == 17) {
+            y = 1;
+            x = 0;
+        }
+        lcd_putchar(x++, y, *str++);
+    }
+}
+
 #ifndef KEIL
 __bit lcd_receieve(unsigned char ch) {
 #else
