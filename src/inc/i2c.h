@@ -12,5 +12,11 @@
 
 void i2c_start(void);
 void i2c_stop(void);
-__bit i2c_addressing(unsigned char addr);
-__bit i2c_write(unsigned char dat);
+unsigned char i2c_addressing(unsigned char addr);
+unsigned char i2c_write(unsigned char dat);
+unsigned char i2c_read_NAK();
+unsigned char i2c_read_ACK();
+unsigned char i2c_read_byte(unsigned char addr);
+__bit i2c_write_byte(unsigned char addr, unsigned char dat);
+unsigned char i2c_read_byte_256(unsigned int addr);
+__bit i2c_write_byte_256(unsigned int addr, unsigned char dat);
