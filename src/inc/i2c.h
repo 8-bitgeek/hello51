@@ -8,6 +8,7 @@
 #define I2C_SDA P3_6
 #endif
 
+
 #define _nop_() __asm nop __endasm
 
 void i2c_start(void);
