@@ -1,4 +1,5 @@
 #include "i2c.h"
+#include "kingst.h"
 
 static void i2c_delay(void) {
     _nop_();

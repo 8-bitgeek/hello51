@@ -64,3 +64,6 @@
 #define N_LED6  P0^6
 #define N_LED7  P0^7
 #endif
+
+
+#define _nop_() __asm nop __endasm

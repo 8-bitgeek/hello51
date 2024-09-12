@@ -9,8 +9,6 @@
 #endif
 
 
-#define _nop_() __asm nop __endasm
-
 void i2c_start(void);
 void i2c_stop(void);
 unsigned char i2c_addressing(unsigned char addr);
