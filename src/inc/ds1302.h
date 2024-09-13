@@ -14,4 +14,4 @@
 
 unsigned char ds1302_read(unsigned char reg);
 void ds1302_write(unsigned char reg, unsigned char dat);
-void ds1302_init();
+void ds1302_init(void);

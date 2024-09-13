@@ -52,7 +52,7 @@ void ds1302_write(unsigned char reg, unsigned char dat) {
     S1302_CE = 0;
 }
 
-void ds1302_init() {
+void ds1302_init(void) {
     unsigned char __code init_time[] = {0x00, 0x30, 0x15, 0x12, 0x09, 0x20, 0x24};      // initial time is 2024-09-12T15:30:00+8
     unsigned char dat = ds1302_read(0);
     if (dat & 0x80) {                                           // ds1302 stopped if high bit is 1
