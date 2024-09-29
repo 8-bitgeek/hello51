@@ -8,7 +8,7 @@ static void delay(void) {
     _nop_();
 }
 
-static unsigned char ds1302_read_byte() {
+static unsigned char ds1302_read_byte(void) {
     unsigned char data = 0;
     SCLK = 0;
     for (unsigned char mask = 0x01; mask != 0; mask <<= 1) {
@@ -34,6 +34,7 @@ static unsigned char ds1302_write_byte(unsigned char reg) {
         SCLK = 0;                                           // ds1302 read signal
     }
     SIO = 1;                                                // release io pin
+    return 0;
 }
 
 unsigned char ds1302_read(unsigned char reg) {

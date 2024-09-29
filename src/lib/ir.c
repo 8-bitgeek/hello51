@@ -39,7 +39,7 @@ void ir_init(unsigned char timer) {
     }
 }
 
-unsigned int get_high_time() {
+unsigned int get_high_time(void) {
     if (ir_timer) {
         TH1 = 0;
         TL1 = 0;
@@ -61,7 +61,7 @@ unsigned int get_high_time() {
     }
 }
 
-unsigned int get_low_time() {
+unsigned int get_low_time(void) {
     if (ir_timer) {
         TH1 = 0;
         TL1 = 0;

@@ -1,114 +1,65 @@
 #include "i2c.h"
-#include "kingst.h"
 
-static void i2c_delay(void) {
-    _nop_();
-    _nop_();
-    _nop_();
-    _nop_();
+/** 
+ * Because 51 mcu is low speed device, so we don't need delay to satisify i2c protocol demand.
+ */
+
+/**
+ * send start signal to all slave device.
+ */
+void i2c_start(void) {
+    I2C_SCL = 1;
+    I2C_SDA = 1;
+    I2C_SDA = 0;
+    I2C_SCL = 0;
 }
 
 /**
- * Testing if spicified addr has a device
+ * send stop signal to stop communication with slave .
  */
-unsigned char i2c_addressing(unsigned char addr) {
-    i2c_start();
-    unsigned ack = i2c_write(addr << 1);               // 7 bit addr + 1 bit W/R, 0 for write
-    i2c_stop();
-    return ack;
-}
-
-void i2c_start(void) {
-    I2C_SDA = 1;
-    I2C_SCL = 1;
-    i2c_delay();
-    I2C_SDA = 0;
-    i2c_delay();
-    I2C_SCL = 0;
-}
-
 void i2c_stop(void) {
-    I2C_SCL = 0;
     I2C_SDA = 0;
-    i2c_delay();
     I2C_SCL = 1;
-    i2c_delay();
     I2C_SDA = 1;
-    i2c_delay();
 }
 
-unsigned char i2c_write(unsigned char dat) {
-    for (unsigned char mask = 0x80; mask != 0; mask >>= 1) {     // MSB(Most Significant Bit)  ====  LSB(Least Significant Bit)
-        if (mask & dat) {           // 1
-            I2C_SDA = 1;
-        } else {
-            I2C_SDA = 0;
-        }
-        i2c_delay();
+/**
+ * send byte to slave device and return 1 if send succeed, otherwise return 0.
+ * @byt: the data send to slave device
+ * Return: if write succeed
+ */
+unsigned char i2c_write_byte(unsigned char byt) {
+    for (unsigned char i = 0x80; i != 0; i >>= 1) {                        // write start with MSB
+        I2C_SDA = (byt & i) == 0 ? 0 : 1;
         I2C_SCL = 1;
-        i2c_delay();
         I2C_SCL = 0;
     }
-    I2C_SDA = 1;                    // data send finished, then relase SDA to detecting slave's response
-    i2c_delay();
-    I2C_SCL = 1;                    // SCL from 0 to 1 to read acknowledgement signal from slave
-    i2c_delay();
-    __bit ACK = I2C_SDA;
-    i2c_delay();
+
+    // i2c protocol claim that all device in i2c bus should in open-drain mode.
+    // receieve ack signal from slave device
+    I2C_SDA = 1;                                                // master must release SDA
+    I2C_SCL = 1;
+    __bit ack = I2C_SDA;
     I2C_SCL = 0;
-    if (ACK) {
-        return 0;
-    } else {
-        return 1;
-    }
+    return ack ? 0 : 1;
 }
 
-unsigned char i2c_read_NAK() {
-    unsigned char mask;
-    unsigned char dat;
-
-    I2C_SDA = 1;
-    for (mask = 0x80; mask != 0; mask >>= 1) {
-        i2c_delay();
+/**
+ * read 1 byte from slave device, and send ack to slave.
+ * Return: 1 byte data from slave device
+ */
+unsigned char i2c_read_byte(void) {
+    unsigned char dat = 0;
+    for (unsigned char i = 0x80; i != 0; i >>= 1) {                        // read from MSB
         I2C_SCL = 1;
-        if (I2C_SDA == 0) {
-            dat &= ~mask;
-        } else {
-            dat |= mask;
+        if (I2C_SDA) {
+            dat |= i;
         }
-        i2c_delay();
         I2C_SCL = 0;
     }
-    // i2c_delay();
-    I2C_SDA = 1;                    // None ACK signal
-    i2c_delay();
+    // send ack signal to slave
+    I2C_SDA = 0;
     I2C_SCL = 1;
-    i2c_delay();
-    I2C_SCL = 0;
-    return dat;
-}
-
-unsigned char i2c_read_ACK() {
-    unsigned char mask;
-    unsigned char dat;
-
-    I2C_SDA = 1;
-    for (mask = 0x80; mask != 0; mask >>= 1) {
-        i2c_delay();
-        I2C_SCL = 1;
-        if (I2C_SDA == 0) {
-            dat &= ~mask;
-        } else {
-            dat |= mask;
-        }
-        i2c_delay();
-        I2C_SCL = 0;
-    }
-    // i2c_delay();
-    I2C_SDA = 0;                    // ACK signal
-    i2c_delay();
-    I2C_SCL = 1;
-    i2c_delay();
     I2C_SCL = 0;
     return dat;
 }

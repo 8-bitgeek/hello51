@@ -4,7 +4,7 @@
 /**
  * 激活普通 LED 控制电路
  */
-void enable_normal_led() {
+void enable_normal_led(void) {
     ENLED = 0;
     ADDR3 = 1;
 
@@ -15,12 +15,12 @@ void enable_normal_led() {
 }
 
 
-unsigned char disable_nixietube() {
+unsigned char disable_nixietube(void) {
     ENLED = 1;
     return 1;
 }
 
-unsigned char close_nixie_display() {
+unsigned char close_nixie_display(void) {
     P0 = 0xff;
     return 1;
 }
