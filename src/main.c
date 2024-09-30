@@ -1,7 +1,7 @@
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #include <8051.h>
-#include "inc/serial.h"
+// #include "inc/serial.h"
 #include "inc/oled12864.h"
 #include "kingst.h"
 #include "i2c.h"
@@ -9,33 +9,28 @@
 
 extern void oled_write_data(u8 * dat, u8 len);
 extern void oled_write_cmd(u8 * cmd, u8 len);
+void oled_continuous_scroll();
 
 void main(void) {
-    serial_init(9600);
+    // serial_init(9600);
     oled_init();
     oled_clear();
     oled_addr_mode(ADDR_MODE_PAGE);
-    u8 __code dat[5 * 16] = {
-0x10,0xF0,0x00,0x80,0x80,0x80,0x00,0x00,/*"h",0*/
-
-0x00,0x00,0x80,0x80,0x80,0x80,0x00,0x00,/*"e",1*/
-
-0x00,0x10,0x10,0xF8,0x00,0x00,0x00,0x00,/*"l",2*/
-
-0x00,0x10,0x10,0xF8,0x00,0x00,0x00,0x00,/*"l",3*/
-
-0x00,0x00,0x80,0x80,0x80,0x80,0x00,0x00,/*"o",4*/
-0x20,0x3F,0x21,0x00,0x00,0x20,0x3F,0x20, 0x00,0x1F,0x24,0x24,0x24,0x24,0x17,0x00, 0x00,0x20,0x20,0x3F,0x20,0x20,0x00,0x00, 0x00,0x20,0x20,0x3F,0x20,0x20,0x00,0x00, 0x00,0x1F,0x20,0x20,0x20,0x20,0x1F,0x00 
-};
+    // oled_print("hello Gldwolf!\n", 0x12);
+    // oled_print("My name is Gldwolf!\n", 0x12);
+    // oled_print("You guys suck!\n", 0x12);
+    // oled_print("Six GOD!\n", 0x12);
+    int i = 0;
     while (1) {
-        oled_print(1, 1, dat, 5, 0x12);
+        for (unsigned int i = 0; i < 65; i++);
+        // oled_inverse_display();
         i2c_start();
-        for (unsigned int i = 0; i < 65535; i++);
         u8 exist = oled_addr();
         if (exist) {
-            printf_tiny("oled screen exist!\n");
+            printf_tiny("i = %d\n", i++);
+            // printf_tiny("oled screen exist!\n");
         } else {
-            printf_tiny("oled screen not exist!\n");
+            // printf_tiny("oled screen not exist!\n");
         }
         i2c_stop();
     }
