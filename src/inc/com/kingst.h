@@ -1,3 +1,6 @@
+#ifndef __KINGST_H__
+#define __KINGST_H__
+
 #define CRYSTYLE_FREQ 11059200
 #define K_CON P2
 
@@ -65,6 +68,7 @@
 #define N_LED7  P0^7
 #endif
 
-
 #define _nop_() __asm nop __endasm
 
+
+#endif
